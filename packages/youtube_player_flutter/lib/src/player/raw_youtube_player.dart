@@ -283,14 +283,27 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
                 });
             }
 
-            function sendPlayerStateChange(playerState) {
-                clearTimeout(timerId);
-                window.flutter_inappwebview.callHandler('StateChange', playerState);
-                if (playerState == 1) {
-                    startSendCurrentTimeInterval();
-                    sendVideoData(player);
-                }
-            }
+            // function sendPlayerStateChange(playerState) {
+            //     clearTimeout(timerId);
+            //     window.flutter_inappwebview.callHandler('StateChange', playerState);
+            //     if (playerState == 1) {
+            //         startSendCurrentTimeInterval();
+            //         sendVideoData(player);
+            //     }
+            // }
+						function sendPlayerStateChange(playerState) {
+							clearTimeout(timerId);
+							try {
+								// Disable captions completely
+								player.unloadModule("captions");
+								player.unloadModule("cc");
+							} catch (exception) { }
+							window.flutter_inappwebview.callHandler('StateChange', playerState);
+							if (playerState == 1) {
+								startSendCurrentTimeInterval();
+								sendVideoData(player);
+							}
+						}
 
             function sendVideoData(player) {
                 var videoData = {
